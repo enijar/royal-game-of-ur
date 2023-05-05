@@ -30,6 +30,17 @@ const config = {
   module: {
     rules: [
       {
+        test: /\.(png|jpg|svg|hdr|mp4|mp3|glb|gltf)$/i,
+        use: [
+          {
+            loader: "file-loader",
+            options: {
+              name: "[name].[contenthash:8].[ext]",
+            },
+          },
+        ],
+      },
+      {
         test: /\.tsx?$/,
         exclude: /node_modules/,
         use: [
@@ -38,11 +49,7 @@ const config = {
             options: {
               cacheCompression: false,
               cacheDirectory: true,
-              presets: [
-                "@babel/preset-typescript",
-                "@babel/preset-react",
-                "@babel/preset-env",
-              ],
+              presets: ["@babel/preset-typescript", "@babel/preset-react", "@babel/preset-env"],
               plugins: [
                 "@babel/plugin-transform-runtime",
                 "babel-plugin-macros",
@@ -125,9 +132,7 @@ const config = {
 export default () => {
   // Production config
   if (!DEV_MODE) {
-    config.plugins.push(
-      new HtmlInlineScriptPlugin({ scriptMatchPattern: [/main.+[.]js$/] })
-    );
+    config.plugins.push(new HtmlInlineScriptPlugin({ scriptMatchPattern: [/main.+[.]js$/] }));
   }
   return config;
 };
