@@ -1,5 +1,4 @@
 import React from "react";
-import { BoxGeometryProps } from "@react-three/fiber";
 
 export default function Board() {
   const settings = React.useMemo(() => {
