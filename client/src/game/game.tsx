@@ -9,7 +9,10 @@ export default function Game() {
     <Canvas flat linear legacy>
       <Lights />
       <Camera />
-      <Board />
+      {/* todo: add a fallback loading component */}
+      <React.Suspense fallback={<></>}>
+        <Board />
+      </React.Suspense>
     </Canvas>
   );
 }

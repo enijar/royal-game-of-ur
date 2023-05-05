@@ -1,5 +1,7 @@
 import React from "react";
+import { Piece as PieceType } from "@/types";
 import { shuffleArray } from "@/utils";
+import Piece from "@/game/components/piece";
 
 export default function Board() {
   const settings = React.useMemo(() => {
@@ -33,24 +35,18 @@ export default function Board() {
     });
   }, [settings.cols, settings.rows]);
 
-  type Piece = {
-    playerId: string;
-    col: number;
-    row: number;
-  };
-
-  const [pieces, setPieces] = React.useState<Piece[]>([]);
+  const [pieces, setPieces] = React.useState<PieceType[]>([]);
 
   React.useEffect(() => {
-    const testPlayerIds = ["player1", "player2"];
+    const testPlayerIndices = [0, 1];
     setPieces(
       shuffleArray(tiles.flat().filter((tile) => !tile.void))
         .slice(0, 5)
         .map((tile, index) => {
           return {
+            playerIndex: testPlayerIndices[index % 2],
             col: tile.col,
             row: tile.row,
-            playerId: testPlayerIds[index % 2],
           };
         })
     );
@@ -75,13 +71,12 @@ export default function Board() {
                 <group key={index} position-z={tile.row * settings.tileSize[0]}>
                   <mesh>
                     <boxGeometry args={settings.tileSize} />
-                    <meshStandardMaterial color="#dbd8bd" />
+                    <meshStandardMaterial color="#bab8a1" />
                   </mesh>
                   {piece !== undefined && (
-                    <mesh position-y={settings.tileSize[1] / 2 + settings.pieceSize[2] / 2}>
-                      <cylinderGeometry args={settings.pieceSize} />
-                      <meshStandardMaterial color="crimson" />
-                    </mesh>
+                    <group position-y={settings.tileSize[1] / 2 + settings.pieceSize[2] / 2}>
+                      <Piece size={settings.pieceSize} piece={piece} />
+                    </group>
                   )}
                 </group>
               );
