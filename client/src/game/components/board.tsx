@@ -53,7 +53,7 @@ export default function Board() {
                 <group key={index} position-z={tile.row * config.board.tileSize[0]}>
                   <mesh>
                     <boxGeometry args={config.board.tileSize} />
-                    <meshStandardMaterial color="#bab8a1" />
+                    <meshStandardMaterial color={config.board.color} />
                   </mesh>
                   {piece !== undefined && (
                     <group

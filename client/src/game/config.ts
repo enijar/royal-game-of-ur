@@ -10,6 +10,8 @@ const config = {
     pieceRadiusRatio: 0.75,
     pieceHeightRatio: 0.2,
     pieceTextureRatio: 1.5,
+    pieceColors: ["#86868f", "#dbd8bd"],
+    color: "#bab8a1",
   },
   camera: {
     position: [-5, 5, 5] as Vector3,

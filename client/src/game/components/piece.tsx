@@ -19,11 +19,6 @@ export default function Piece({ piece }: Props) {
       texture.anisotropy = gl.capabilities.getMaxAnisotropy();
     });
   }, [textures, gl]);
-
-  const colors = React.useMemo(() => {
-    return ["#86868f", "#dbd8bd"];
-  }, []);
-
   const settings = React.useMemo(() => {
     const radius = config.board.tileSize[0] * 0.5 * config.board.pieceRadiusRatio;
     return {
@@ -37,7 +32,7 @@ export default function Piece({ piece }: Props) {
     <>
       <mesh>
         <cylinderGeometry args={[settings.radius, settings.radius, settings.height, 32, 32]} />
-        <meshStandardMaterial color={colors[piece.playerIndex]} />
+        <meshStandardMaterial color={config.board.pieceColors[piece.playerIndex]} />
       </mesh>
       <group position-y={settings.height / 2}>
         <mesh renderOrder={1} rotation-x={THREE.MathUtils.degToRad(-90)}>
