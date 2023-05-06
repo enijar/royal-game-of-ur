@@ -4,13 +4,13 @@ import { useThree } from "@react-three/fiber";
 import { useTexture } from "@react-three/drei";
 import { Piece as PieceType } from "@/types";
 import assets from "@/assets";
+import config from "@/game/config";
 
 type Props = {
-  size: [radiusTop: number, radiusBottom: number, height: number, radialSegments: number, heightSegments: number];
   piece: PieceType;
 };
 
-export default function Piece({ size, piece }: Props) {
+export default function Piece({ piece }: Props) {
   const gl = useThree((state) => state.gl);
 
   const textures = useTexture([assets.piecePlayer1, assets.piecePlayer2]);
@@ -24,15 +24,24 @@ export default function Piece({ size, piece }: Props) {
     return ["#86868f", "#dbd8bd"];
   }, []);
 
+  const settings = React.useMemo(() => {
+    const radius = config.board.tileSize[0] * 0.5 * config.board.pieceRadiusRatio;
+    return {
+      radius,
+      height: config.board.tileSize[1] * config.board.pieceHeightRatio,
+      textureSize: radius * config.board.pieceTextureRatio,
+    };
+  }, []);
+
   return (
     <>
       <mesh>
-        <cylinderGeometry args={size} />
+        <cylinderGeometry args={[settings.radius, settings.radius, settings.height, 32, 32]} />
         <meshStandardMaterial color={colors[piece.playerIndex]} />
       </mesh>
-      <group position-y={size[2] / 2}>
+      <group position-y={settings.height / 2}>
         <mesh renderOrder={1} rotation-x={THREE.MathUtils.degToRad(-90)}>
-          <planeGeometry args={[size[0] * 1.5, size[0] * 1.5]} />
+          <planeGeometry args={[settings.textureSize, settings.textureSize]} />
           <meshStandardMaterial
             depthWrite={false}
             depthTest={false}
