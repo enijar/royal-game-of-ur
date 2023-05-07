@@ -14,7 +14,7 @@ const config = {
     color: "#bab8a1",
   },
   camera: {
-    position: [-5, 5, 5] as Vector3,
+    position: [0, 7, 7] as Vector3,
   },
 } as const;
 
