@@ -9,19 +9,17 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout 🛎️
-        uses: actions/checkout@v3
-        with:
-          persist-credentials: false
+      - name: Checkout
+        uses: actions/checkout@v2
 
-      - name: Install and Build 🔧
-        run: |
-          npm ci
-          PUBLIC_PATH=./ npm run build
+      - name: Install
+        run: npm ci
 
-      - name: Deploy 🚀
-        uses: JamesIves/github-pages-deploy-action@v4
+      - name: Build
+        run: PUBLIC_PATH=./ npm run build
+
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
         with:
-          branch: gh-pages
-          folder: build
-          clean: true
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: build
