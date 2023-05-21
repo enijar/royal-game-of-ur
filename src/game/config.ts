@@ -9,7 +9,7 @@ const config = {
     tileSize: [1, 0.75, 1] as [width: number, height: number, depth: number],
     pieceRadiusRatio: 0.75,
     pieceHeightRatio: 0.2,
-    pieceTextureRatio: 1.5,
+    pieceTextureRatio: 2,
     pieceColors: ["#86868f", "#dbd8bd"],
     color: "#bab8a1",
   },
