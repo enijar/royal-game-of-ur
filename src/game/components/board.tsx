@@ -1,36 +1,41 @@
 import React from "react";
 import * as THREE from "three";
+import { useThree } from "@react-three/fiber";
 import { useTexture } from "@react-three/drei";
-import { Piece as PieceType } from "@/types";
-import { shuffleArray } from "@/utils";
+import { Piece as PieceType, Tile } from "@/types";
+import { getTextureIndex, shuffleArray } from "@/utils";
 import Piece from "@/game/components/piece";
 import config from "@/game/config";
 import assets from "@/assets";
 
 export default function Board() {
-  const tileTextures = useTexture([assets.tile1, assets.tile2, assets.tile3, assets.tile4, assets.tile5]);
+  const tileTextures = useTexture([
+    assets.tileRosetta,
+    assets.tileEyes,
+    assets.tileGrid,
+    assets.tileDots,
+    assets.tileMaze,
+  ]);
+  const gl = useThree((state) => state.gl);
+  React.useMemo(() => {
+    tileTextures.forEach((tileTexture) => {
+      tileTexture.anisotropy = gl.capabilities.getMaxAnisotropy();
+    });
+  }, [tileTextures, gl]);
 
   const tiles = React.useMemo(() => {
+    const tileTypes = [
+      [Tile.rosetta, Tile.eyes, Tile.dots, Tile.eyes, Tile.void, Tile.void, Tile.rosetta, Tile.maze],
+      [Tile.maze, Tile.dots, Tile.grid, Tile.rosetta, Tile.dots, Tile.grid, Tile.eyes, Tile.dots],
+      [Tile.rosetta, Tile.eyes, Tile.dots, Tile.eyes, Tile.void, Tile.void, Tile.rosetta, Tile.maze],
+    ];
     return Array.from(Array(config.board.cols)).map((_, col) => {
       return Array.from(Array(config.board.rows)).map((_, row) => {
-        const rosettaTiles = [
-          { row: 0, col: 0 },
-          { row: 0, col: 2 },
-        ];
-        function getTextureIndex(row: number, col: number): number {
-          const rosettaTile = rosettaTiles.find((tile) => {
-            return tile.row === row && tile.col === col;
-          });
-          if (rosettaTile !== undefined) {
-            return 3;
-          }
-          return 0;
-        }
         return {
           col,
           row,
           void: config.board.voidCols.includes(col) && config.board.voidRows.includes(row),
-          textureIndex: getTextureIndex(row, col),
+          type: tileTypes[col][row],
         };
       });
     });
@@ -45,6 +50,7 @@ export default function Board() {
         .slice(0, 5)
         .map((tile, index) => {
           return {
+            ...tile,
             playerIndex: testPlayerIndices[index % 2],
             col: tile.col,
             row: tile.row,
@@ -70,12 +76,12 @@ export default function Board() {
                   return piece.col == tile.col && piece.row === tile.row;
                 });
                 return (
-                  <group key={index} position-z={tile.row * config.board.tileSize[0]}>
+                  <group key={index} position-z={config.board.tileSize[0] * tile.row}>
                     <mesh>
                       <boxGeometry args={config.board.tileSize} />
                       <meshStandardMaterial color={config.board.color} attach="material-0" />
                       <meshStandardMaterial color={config.board.color} attach="material-1" />
-                      <meshStandardMaterial map={tileTextures[tile.textureIndex]} attach="material-2" />
+                      <meshStandardMaterial map={tileTextures[getTextureIndex(tile.type)]} attach="material-2" />
                       <meshStandardMaterial color={config.board.color} attach="material-3" />
                       <meshStandardMaterial color={config.board.color} attach="material-4" />
                       <meshStandardMaterial color={config.board.color} attach="material-5" />
