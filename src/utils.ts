@@ -1,4 +1,4 @@
-import { Tile } from "@/types";
+import { TileType } from "@/types";
 
 export function shuffleArray<T = any>(array: T[]): T[] {
   for (let i = array.length - 1; i > 0; i--) {
@@ -8,7 +8,7 @@ export function shuffleArray<T = any>(array: T[]): T[] {
   return array;
 }
 
-export function getTextureIndex(type: Tile): number {
-  const types = Object.values(Tile);
+export function getTextureIndex(type: TileType): number {
+  const types = Object.values(TileType);
   return types.indexOf(type);
 }

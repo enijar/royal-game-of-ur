@@ -2,7 +2,7 @@ import React from "react";
 import * as THREE from "three";
 import { useThree } from "@react-three/fiber";
 import { useTexture } from "@react-three/drei";
-import { Piece as PieceType, Tile } from "@/types";
+import { Piece as PieceType, TileType } from "@/types";
 import { getTextureIndex, shuffleArray } from "@/utils";
 import Piece from "@/game/components/piece";
 import config from "@/game/config";
@@ -25,9 +25,36 @@ export default function Board() {
 
   const tiles = React.useMemo(() => {
     const tileTypes = [
-      [Tile.rosetta, Tile.eyes, Tile.dots, Tile.eyes, Tile.void, Tile.void, Tile.rosetta, Tile.maze],
-      [Tile.maze, Tile.dots, Tile.grid, Tile.rosetta, Tile.dots, Tile.grid, Tile.eyes, Tile.dots],
-      [Tile.rosetta, Tile.eyes, Tile.dots, Tile.eyes, Tile.void, Tile.void, Tile.rosetta, Tile.maze],
+      [
+        TileType.rosetta,
+        TileType.eyes,
+        TileType.dots,
+        TileType.eyes,
+        TileType.void,
+        TileType.void,
+        TileType.rosetta,
+        TileType.maze,
+      ],
+      [
+        TileType.maze,
+        TileType.dots,
+        TileType.grid,
+        TileType.rosetta,
+        TileType.dots,
+        TileType.grid,
+        TileType.eyes,
+        TileType.dots,
+      ],
+      [
+        TileType.rosetta,
+        TileType.eyes,
+        TileType.dots,
+        TileType.eyes,
+        TileType.void,
+        TileType.void,
+        TileType.rosetta,
+        TileType.maze,
+      ],
     ];
     return Array.from(Array(config.board.cols)).map((_, col) => {
       return Array.from(Array(config.board.rows)).map((_, row) => {
@@ -36,6 +63,7 @@ export default function Board() {
           row,
           void: config.board.voidCols.includes(col) && config.board.voidRows.includes(row),
           type: tileTypes[col][row],
+          playerIndex: -1,
         };
       });
     });

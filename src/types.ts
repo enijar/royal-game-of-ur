@@ -4,7 +4,7 @@ export type Piece = {
   row: number;
 };
 
-export enum Tile {
+export enum TileType {
   rosetta = "rosetta",
   eyes = "eyes",
   grid = "grid",
